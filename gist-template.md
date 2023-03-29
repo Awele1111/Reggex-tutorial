@@ -1,12 +1,19 @@
-# Regex-tutorial
+# Regex-tutorial - matching a hex value
 
-In this challenge, a regex - tutorial was created that explains how a specific regular expression, or regex, functions by breaking down each part of the expression and describing what it does. A template was provided in the starter code to create my walkthrough.
+This file focuses on creating a Regular expression tutorial which focuses on matching a hex value.
+The descriptions below explain how a specific regular expression, or regex, functions by breaking down components of the expression and describing what it does. 
 
 
 
 ## Summary
 
-A **regex**, which is short for **regular expression**, can be described as a sequence of characters that defines a specific search pattern. When included in code or search algorithms, regular expressions can be used to find certain patterns of characters within a string, or to find and replace a character or sequence of characters within a string. They are also frequently used to validate input. Regex are also frequently used to validate input. 
+A **regex**, which is short for **regular expression**, can be described as a sequence of characters that defines a specific search pattern. Regex is case sensitive. When included in code or search algorithms, regular expressions can be used to find certain patterns of characters within a string, or to find and replace a character or sequence of characters within a string. They are also frequently used to validate input. Regex are also frequently used to validate input. 
+
+We will be evaluating the following regular expressions used to match HEX values:
+
+/^#?([a-f0-9]{6}|[a-f0-9]{3})$/
+
+Descriptions below will provide details of the anchors, quantifiers, OR Operator, grouping and capturing and bracket expressions used in this regular expression (focusing on matching HEX values).
 
 
 
@@ -14,119 +21,104 @@ A **regex**, which is short for **regular expression**, can be described as a se
 
 - [Anchors](#anchors)
 - [Quantifiers](#quantifiers)
-- [Grouping Constructs](#grouping-constructs)
+- [Grouping and Capturing](#grouping-and-capturring)
 - [Bracket Expressions](#bracket-expressions)
 - [Character Classes](#character-classes)
 - [The OR Operator](#the-or-operator)
-- [Flags](#flags)
-- [Character Escapes](#character-escapes)
+- [Greedy and Lazy Match](#greedy-and-lazy-match)
 
 ## Regex Components
 
 A regex is considered a literal, so the pattern must be wrapped in slash characters (/). If we examine the “Matching a Username” regex, you'll see that this is true:
 
-/^[a-z0-9_-]{3,16}$/
-Note: JavaScript provides two ways to create a regex object. The first, shown in our example, uses literal notation. The second is to use a RegExp constructor. The constructor function's parameters are not enclosed within slashes; instead, they use quotation marks. To learn more, review the MDN Web Docs on the RegExp object.
-
-Now let's take a look at the components of a regex
+Now let's take a look at the components of a regex in relation to matching a hex value:
 
 ### Anchors
-The characters ^ and $ are both considered to be anchors.
 
-The ^ anchor signifies a string that begins with the characters that follow it. This could be in one of two formats:
+Anchor: ^ Code Snipet: /^#
 
-An exact string match, such as ^The, where the strings "The" or "The person" match, but "the" and "the person" do not. This is because a regex is case-sensitive.
+Description:
+ Anchors match regular expressions by asserting something about the string (e.g. beginning, end) based on expressions/matching pattern next to the anchor.Anchors  do not match regular expressions by themselves.
 
-A range of possible matches, displayed using bracket expressions. We'll discuss this in the next section.
+For example: ^This indicates that the string must begin with This.
 
-The $ anchor signifies a string that ends with the characters that precede it. Just as with the ^ character, it can be preceded by an exact string or a range of possible matches.
+The ^ is an anchor which indicates that the beginning of the string must match the character #. # is what is used to distinguish a hexadecimal number from a decimal number. However, as we will see in the next anchor, # is optional.
 
-So in our “Matching a Username” regex, the string must start and end with something that matches the pattern [a-z0-9_-]. You'll notice that we didn't include the pattern {3,16}, which precedes the $ character. Why? Because this is a special component called a quantifier. We'll come back to quantifiers in a moment.
+Anchor: $
 
-Let's take a look at the pattern [a-z0-9_-] and see what it means.
+Code Snipet: $/
 
+Description:
+
+The $ anchor signifies a string that ends with the characters that precede it. The The $ anchor is used to check if a string matches properly with a pattern. It is used to assert a pattern to the end of the string. The $ anchor does not assert at the beginning of a string.
+
+For Example: end$ indicates that the string must end with end.
+
+So, in our “Matching a hex value” regex, the string must match with the 3 or 6 character pattern identified before the $ anchor. The 3 or 6 character pattern is described in more detail under Quantifiers below.
 
 
 ### Quantifiers
+
 Quantifiers set the limits of the string that your regex matches (or an individual section of the string). They frequently include the minimum and maximum number of characters that your regex is looking for.
 
-Quantifiers are inherently greedy, meaning they match as many occurrences of particular patterns as possible. They include the following:
+Quantifier: ?
 
-*—Matches the pattern zero or more times
+Code Snipet: /^#?
 
-+—Matches the pattern one or more times
+Description:
 
-?—Matches the pattern zero or one time
+In our matching a hex value regex, the quantifier ? indicates that the character # preceding the quantifier ? is optional. It's optional for # to appear at the beginning of the expression.
 
-{}—Curly brackets can provide three different ways to set limits for a match:
+? implies a boolean value, 0 or 1. Typically, this makes the preceding symbol/character optional.
 
-{ n }—Matches the pattern exactly n number of times
+For example: This could be useful to distinguish between British and American spelling in a string e.g. colour vs color -- the regex would colou?r
 
-{ n, }—Matches the pattern at least n number of times
+Quantifier: {}
 
-{ n, x }—Matches the pattern from a minimum of n number of times to a maximum of x number of times
+Code Snipet: [a-f0-9]{6} Code Snipet: [a-f0-9]{3}
 
-Each of these quantifiers can be made lazy by adding the ? symbol after it, meaning it will match as few occurrences as possible.
+Description:
 
-Now let’s look at how quantifiers are used in the “Matching a Username” regex. There, we have the quantifier {3,16}. This means that we want to find the preceding string pattern a minimum of 3 times and a maximum of 16 times. Because our bracket expression ([a-z0-9_-]) will match any string that includes any combination of lowercase letters between a and z, any number between 0 and 9, and the special characters of an underscore or a hyphen, this quantifier means that this string has to be between 3 and 16 characters.
+Quantifier indicates the number of times the preceding pattern matches. Normally, the quantifiers are greedy, causing the regex to match as many occurrences of a particular pattern as possible. However, if ? was appended, the quantifier would become lazy-- causing the regex to match as few occurrences as possible. In our case, the quantifier is greedy.
 
+For example: 2{5} indicates that 2 must be repeated 5 times. Matching string must be 22222.
 
-### Grouping Constructs
+In our regex, {6} indicates that there are 6 instances of the string in the preceding bracket expression. That implies that this quantifier will allow exactly 6 characters in the string containing characters between a-f and/or integer between 0-9. {3} indicates that there are 3 instances of the string in the preceding bracket expression. That implies that this quantifier will allow exactly 3 characters in the string containing characters between a-f and/or integer between 0-9.
 
-Grouping constructs break sections up which may fulfill different requirements. Making us of parentheses (()) is a primary way to group a section of regex. The sections within the parentheses are called subexpressions. An example of subexpressions or two grouping constructs is (abc):(xyz).
-The first subexpression above is looking for a part of the string that matches the string "abc" exactly. Similarly, the second subexpression is looking for "xyz". In between the subexpressions, we have a colon (:). Thus, the string "abc:xyz" would match, but the string "acb:xyz" would not. Unlike bracket expressions, subexpressions look for an exact match unless they're told to do otherwise.
+### Grouping and Capturing
+ 
+ Grouping and Capturing: ()
 
-Grouping constructs have two primary categories: capturing and non-capturing. The details about how capturing and non-capturing groups are used are beyond the scope of this tutorial. The important thing to understand is that capturing groups capture the matched character sequences for possible re-use (including a numbered backreference) while non-capturing groups do not. A grouping construct can be made non-capturing by adding the characters ?: at the beginning of an expression inside the parentheses.
+Code Snipet: ([a-f0-9]{6}|[a-f0-9]{3})
+
+Description: The () works by grouping the regular expression between them. The grouping treats multiple characters as a single unit. This can be useful when extracting information using any programming language. This group of data will be exposed in the form of an array. Values can be accessed using an index on the result of the match.
+
+For example: (pet){3} matched petpetpet. The unit of characters 'pet' would need to repeat 3 times indicated in the quantifier.
+
+In our case, the grouped expression is a bracket expression whereby details are provided in the section below. Ultimately the end string anchor $ is applied to this grouping.
 
 ### Bracket Expressions
 
-Anything inside a set of square brackets ([]) represents a range of characters that we want to match. These patterns are known as bracket expressions, but they are also known as a positive character group, because they outline the characters we want to include. We can write these expressions to include all of the characters we want to match. For example, [abc] will look for a string that includes a or b or c, regardless of the length of the string. So all of the following examples would match: "aaa", "bin" "court", "abracadabra", and "bca".
+Bracket Expression: []
 
-You'll more commonly see a hyphen (-) used between alphanumeric characters (letters and numbers only) to represent a range of those possible characters. This means that [a-c] and [abc] will look for the exact same thing.
+Code Snipet: [a-f0-9]
 
-In our “Matching a Username” regex example, we can break down the bracket expressions as follows:
+Description: Bracket expression is a regex that matches a specific pattern of characters (alphabetic, numeric, special characters, symbols etc..) defined within the brackets. Typically a hyphen(-) is used to describe a set or range of characters e.g. [a-z]. It is possible to use the ^ metacharacter to negate what is in between the brackets.
 
-[a-z]—The string can contain any lowercase letter between a–z. Keep in mind that this looks for lowercase characters only. If we wanted to include uppercase characters, we would need to change the expression to [a-zA-Z].
+For example: [a-d 1-3] indicates that the string must include atleast 1 character that is between a and d or 1-3
 
-[0-9]—The string can contain any number between 0–9
-
-[_-]—The string can contain an underscore or hyphen. Both the underscore and the hyphen are called special characters. Special characters include any non-alphanumeric characters, such as punctuation or symbols. In this case, we only want a string that includes _ or -. It's important to note that the hyphen here is not the same hyphen that we used in our alphanumeric ranges. In bracket expressions, special characters that we want to include follow alphanumeric character ranges within the brackets.
-
-If we put all of these expressions together so that our pattern is [a-z0-9_-], this will match any string that includes any combination of lowercase letters between a and z, any number between 0 and 9, and the special characters of an underscore or a hyphen. Keep in mind that these characters can be in any order. It's also important to note that this pattern does not require the string to meet all of these requirements; it can meet any of them.
-
-The following examples fulfill the requirements of this regex:
-
-"lernantino"
-
-"lernantino1"
-
-"l3rnantino_1"
-
-"lern-antino"
-
-"21452"
-
-"_-_-"
-
-What about the string "Lernantino"? This would not match our pattern because it includes an uppercase character, L.
-
-It's important to note that a bracket expression can be turned into a negative character group by adding the ^ symbol to the beginning of the expression inside the brackets. A common example is matching a string that doesn't include any vowels. The pattern [^aeiouAEIOU] would find any strings that don't include lowercase or uppercase vowels.
+In our reg ex, the bracket [] expression indicates matching a string that has any lower case character between a-f or any integer between 0-9
 
 ### Character Classes
 
 A character class in a regex defines a set of characters, any one of which can occur in an input string to fulfill a match. We've actually already discussed some character classes. The bracket expressions outlined previously, including positive and negative character groups, are considered character classes.
 
-Here are some of the other common character classes:
+Code Snipet: a-f0-9 Description: Character classes only matches one out of many characters defined in the character set. A hyphen can be used inside a character class to define a range of characters More than one range can be used -- as is the case in our code snipet.
 
-.—Matches any character except the newline character (\n)
+For example: [0-9] This character class matches a single digit between 0 and 9
 
-\d—Matches any Arabic numeral digit. This class is equivalent to the bracket expression [0-9].
+In our case, the character class consists of lower case a-f and/or integer 0-9.
 
-\w—Matches any alphanumeric character from the basic Latin alphabet, including the underscore (_). This class is equivalent to the bracket expression [A-Za-z0-9_].
-
-\s—Matches a single whitespace character, including tabs and line breaks
-
-Each of the last three character classes can be changed to perform an inverse match by capitalizing the letter character. For example, \D matches a non-digit character.
 
 
 
@@ -134,32 +126,37 @@ Each of the last three character classes can be changed to perform an inverse ma
 
 Remember that a bracket expression does not require the string to meet all of the requirements in the pattern. This means that [a-z0-9_-] searches for alphanumeric characters or the two special characters included in the pattern. Often, you'll want to add this same logic outside of a bracket expression, especially within a grouping construct or between two different grouping constructs.
 
-Using the OR operator (|), the expression [abc] could be written as (a|b|c). Using our example in the grouping constructs section, we can take the original expression:
+OR Operator: |
 
-(abc):(xyz)
-And then use the OR operator to convert it to the following:
+Code Snipet: [a-f0-9]{6}|[a-f0-9]{3}
 
-(a|b|c):(x|y|z)
-Now, both of the strings "abc:xyz" and "acb:xyz" would match, as well as "a:z", but "xyz:abc" would not.
+Description: The | indicator (i.e. OR indicator) is a boolean that matches either the expression before or after.
 
-### Flags
+For example: 3|5 indicates that either 3 or 5 or both integers are allowed in the string. 353 or 333 or 555 are all acceptable matching patterns.
 
-We started this tutorial by explaining that as a literal, a regex must be wrapped in slash characters. The one exception to this rule is with the component known as flags. Flags are placed at the end of a regex, after the second slash, and they define additional functionality or limits for the regex. There are six optional flags that can be used, either separately or together and in any order, but these are the three you're most likely to encounter:
+In our case, that means match with 3 character string containing lower case a-f and/or integer 0-9 OR a string with 6 characters containing lowercase a-f and/or integer between 0-9. A matching string has to have 3 or 6 character with the specified pattern. Anything that is not 3 or 6 characters will not match.
 
-g—Global search: the regex should be tested against all possible matches in a string.
+## Greedy and Lazy Match
 
-i—Case-insensitive search: case should be ignored while attempting a match in a string
+Code Snipet: [a-f0-9]{6} Code Snipet: [a-f0-9]{3}
 
-m—Multi-line search: a multi-line input string should be treated as multiple lines
+Quantifier: {}
+
+Description: Greedy means match the longest possible string. Lazy means match the shortest possible string.
+
+For example: w.+l matches well in well but the lazy w.+?l matches wel
+
+As described in the quantifier section above, normal quantifiers are greedy, which causes the regex to match as many occurrences of a particular pattern as possible. However, if ? was appended, the quantifier would become lazy-- causing the regex to match as few occurrences as possible. In our case, the quantifier is greedy.
 
 
-### Character Escapes
-The backslash (\) in a regex escapes a character that otherwise would be interpreted literally. For example, the open curly brace ({) is used to begin a quantifier, but adding a backslash before the open curly brace (\{) means that the regex should look for the open curly brace character instead of beginning to define a quantifier. This is common when looking for strings with special characters that are the same as a particular component of a regex.
 
-It's important to note that all special characters, including the backslash (\), lose their special significance inside bracket expressions.
+
+
 ## Author
 
-A short section about the author with a link to the author's GitHub profile (replace with your information and a link to your profile)
+My name is Awele Anita Lan. My main goal is to explore Javascript, Node.js, Sequelize, MySQL, CSS, HTML, React and other web technologies. My GitHub page has many projects while learning and exploring web technologies. Creating this tutorial via github gist is another way to describe and explore another important technology - Regex.
+
+You will continue to see new projects in the future.
 
 Author - Awele Anita LAN 
 ## Link to github profile below:
