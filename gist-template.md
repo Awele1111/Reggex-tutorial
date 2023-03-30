@@ -26,6 +26,7 @@ Descriptions below will provide details of the anchors, quantifiers, OR Operator
 - [Character Classes](#character-classes)
 - [The OR Operator](#the-or-operator)
 - [Greedy and Lazy Match](#greedy-and-lazy-match)
+- [Author](#author)
 
 ## Regex Components
 
